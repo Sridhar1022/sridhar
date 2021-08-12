@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+
+  <div id="page">
+
+
+    <h1>Movie Search Created By Sridhar</h1>
+    <form id="searchForm" method="post">
+      <fieldset>
+        <input id="s" [(ngModel)]="searchKey" (keyup.enter)="DoSearch()" placeholder="Type here..." [ngModelOptions]="{standalone: true}"
+        />
+
+        <input type="button" id="submitButton" (click)="DoSearch()" [disabled]="searchKey==''" />
+        <div id="searchInContainer">
+
+        </div>
+      </fieldset>
+    </form>
+
+    <div *ngIf="commons.requestCount > 0">
+      <div class="loadingDiv">
+        <img src="/src/app/img/ajax-loader.gif" alt="">
+      </div>
+    </div>
+
+    <div id="resultsDiv">
+      <div *ngIf="response!=null">
+        <div *ngIf="response.Response=='True'; then content else notfoundcontent"></div>
+
+        <ng-template #content>
+          <div *ngFor="let res of response.Search;let index = i;">
+            <div class="card" style="display: inline-flex;">
+              <img
+                [src]="res.Poster" 
+                class="card-img-top" 
+                (click)="DoSearchDetails(res.imdbID,i,res)"
+                [alt]="res.Title">&nbsp;&nbsp;
+              <div class="card-body" style="margin-left: 50px;">
+                <h5 class="card-title" style="font-size: medium;color: brown;">
+                  {{ res.Title}}
+                  <span class="badge badge-primary">{{ res.Type | uppercase }}</span>
+                </h5>
+                <p class="card-text">
+                  {{ res.Title }} is a {{ res.Type }} that was released in {{ res.Year }}
+                </p><br>
+                <h3>Details-Click on image to know more details</h3><br>
+                  <div *ngIf="res.responsedata" id="searchForm" style="font-size: medium;color:white;">
+                    Actors:{{res.responsedata.Actors}}<br>
+                    Awards: {{res.responsedata.Awards}}<br>
+                    BoxOffice: {{res.responsedata.BoxOffice}}<br>
+                    Country: {{res.responsedata.Country}}<br>
+                    DVD: {{res.responsedata.DVD}}<br>
+                    Director: {{res.responsedata.Director}}<br>
+                    Genre: {{res.responsedata.Genre}}<br>
+                    Language: {{res.responsedata.Language}}<br>
+                    Metascore: {{res.responsedata.Metascore}}
+                  </div>
+              </div>
+             </div>
+          </div>
+          <!-- <table class=mainTable *ngFor="let res of response.Search">
+            <tr>
+              <td rowspan=9>
+                <img [src]="res.Poster" alt="Not found avatar url" width="400">
+              </td>
+            </tr>
+            <tr>
+              <td style="width:100px;">Title</td>
+              <td>{{res.Title}}</td>
+            </tr>
+            <tr>
+              <td>Year</td>
+              <td>{{res.Year}}</td>
+            </tr>
+            <tr>
+              <td>Genre</td>
+              <td>{{res.Genre}}</td>
+            </tr>
+            <tr>
+              <td>Actors</td>
+              <td>{{res.Actors}}</td>
+            </tr>
+            <tr>
+              <td>Plot</td>
+              <td>{{res.Plot}}</td>
+            </tr>
+            <tr>
+              <td>IMDB Rating</td>
+              <td>{{res.imdbRating}}</td>
+            </tr>
+            <tr>
+              <td>IMDB ID</td>
+              <td>{{res.imdbID}}</td>
+            </tr>
+            <tr>
+              <td>Awards</td>
+              <td>
+                {{res.Awards}}
+              </td>
+            </tr>
+          </table> -->
+        </ng-template>
+        <ng-template #notfoundcontent>
+          Not found any movie..
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
